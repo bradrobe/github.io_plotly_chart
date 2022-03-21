@@ -53,69 +53,58 @@ function buildMetadata(sample) {
   });
 }
 
-// 1. Create the buildCharts function.
 function buildCharts(sample) {
-  // 2. Use d3.json to load and retrieve the samples.json file 
+  // Use d3.json to load the samples.json file 
   d3.json("samples.json").then((data) => {
     console.log(data);
-    // 3. Create a variable that holds the samples array. 
+
+    // Create a variable that holds the samples array. 
     var samples = data.samples;
-      
-    // 4. Create a variable that filters the samples for the object with the desired sample number.
+    // console.log(samples);
+
+    // Create a variable that filters the samples for the object with the desired sample number.
     var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
 
-    //data.metadata
-    //  5. Create a variable that holds the first sample in the array.
-    var result = resultArray[0]
+    // 1. Create a variable that filters the metadata array for the object with the desired sample number.
+    var metadataArray = data.metadata.filter(sampleObj => sampleObj.id == sample);
+
+    // Create a variable that holds the first sample in the array.
+    var result = resultArray[0];
+
+    // 2. Create a variable that holds the first sample in the metadata array.
+    var metadata = metadataArray[0];
+
+    // Create variables that hold the otu_ids, otu_labels, and sample_values.
+    var otu_ids = result.otu_ids;
+    var otu_labels = result.otu_labels;
+    var sample_values = result.sample_values;
+
+    // 3. Create a variable that holds the washing frequency.
+    var frequency = parseFloat(metadata.wfreq);
 
 
-    // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
-    var ids = result.otu_ids;
-    var labels = result.otu_labels;
-    var values = result.sample_values;
-
-
-    // 7. Create the yticks for the bar chart.
-    // Hint: Get the the top 10 otu_ids and map them in descending order  
-    //  so the otu_ids with the most bacteria are last. 
-    //data.sort(function(a, b) {
-      //return parseFloat(b.otu_ids) - parseFloat(a.otu_ids);
-    //});
-
-    var yticks = ids.slice(0, 10).map(otuID => 'OTU ${otuID}').reverse();
-    //data = data.reverse();
-
-    // 8. Create the trace for the bar chart. 
-    var barData = {
-      x: values.slice(0, 10).reverse(),
-      y: yticks, 
-      text: labels.slice(0, 10).reverse(),
-      name: "OTU",
-      type: "bar",
-      orientation: "h"
-    };
-      
-    // 9. Create the layout for the bar chart. 
+    // Create the yticks for the bar chart.
+    // Hint: Get the the top 10 otu_ids and map them in descending order 
+    // so the otu_ids with the most bacteria are last. 
+    var yticks = otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse();
+    // Create the trace for the bar chart. 
+    var barData = [
+      {
+        y: yticks,
+        x: sample_values.slice(0, 10).reverse(),
+        text: otu_labels.slice(0, 10).reverse(),
+        type: "bar",
+        orientation: "h",
+      }
+    ];
+    // Create the layout for the bar chart. 
     var barLayout = {
       title: "Top 10 Bacteria Cultures Found",
-      margin: {t:28, l:160}
+      margin: { t: 30, l: 150 }
     };
-
-    // 10. Use Plotly to plot the data with the layout. 
+    // Use Plotly to plot the data with the layout. 
     Plotly.newPlot("bar", barData, barLayout);
 
-  //   var bubbleData = [{
-  //     x: otu_ids,//.map(row => row.sample_values),
-  //     y: sample_vaules, //data.map(row => row.otu_ids),
-  //     text: otu_labels,
-  //     mode: "markers",
-  //     marker: {color: red,
-  //     size: otu_ids
-      
-  // }}];
-
-
-//}
 
 // Bar and Bubble charts
 // // Create the buildCharts function.
@@ -123,19 +112,19 @@ function buildCharts(sample) {
 //   // Use d3.json to load and retrieve the samples.json file 
 //   d3.json("samples.json").then((data) => {
     
-
+// Deliverable 2:
 //     // Deliverable 1 Step 10. Use Plotly to plot the data with the layout. 
 //     Plotly.newPlot("bar"); 
 
 //     // 1. Create the trace for the bubble chart.
-var bubbleData = [{
-  x: ids,
-  y: values,
-  text: labels,
-  mode: "markers",
-  marker: {
-    color: ids,
-    size: values,
+    var bubbleData = [{
+      x: ids,
+      y: values,
+      text: labels,
+      mode: "markers",
+      marker: {
+        color: values,
+        size: values,
   
 }}];
 
@@ -155,3 +144,5 @@ var bubbleData = [{
 
 
  }
+
+ 

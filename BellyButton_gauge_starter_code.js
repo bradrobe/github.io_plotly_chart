@@ -1,3 +1,28 @@
+// function init() {
+//   // Grab a reference to the dropdown select element
+//   var selector = d3.select("#selDataset");
+
+//   // Use the list of sample names to populate the select options
+//   d3.json("samples.json").then((data) => {
+//     var sampleNames = data.names;
+
+//     sampleNames.forEach((sample) => {
+//       selector
+//         .append("option")
+//         .text(sample)
+//         .property("value", sample);
+//     });
+
+//     // Use the first sample from the list to build the initial plots
+//     var firstSample = sampleNames[0];
+//     buildCharts(firstSample);
+//     buildMetadata(firstSample);
+//   });
+// }
+
+// // Initialize the dashboard
+// init();
+
 // Create the buildChart function.
 function buildCharts(sample) {
   // Use d3.json to load the samples.json file 
@@ -9,12 +34,10 @@ function buildCharts(sample) {
     var samples = data.samples;
     // Create a variable that filters the samples for the object with the desired sample number.
     var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
-    var metadataArray = data.metadata.filter(sampleObj => sampleObj.id == sample);
 
     // 1. Create a variable that filters the metadata array for the object with the desired sample number.
-    var metadata = data.metadata;
-    var gaugeArray = metadata.filter(sampleObj => sampleObj.id == sample);
-
+    var metadataArray = data.metadata.filter(sampleObj => sampleObj.id == sample);
+ 
     // Create a variable that holds the first sample in the array.
     
     // 2. Create a variable that holds the first sample in the metadata array.
@@ -65,3 +88,4 @@ function buildCharts(sample) {
     Plotly.newPlot('gauge', gaugeData, gaugeLayout);
   });
 }
+
